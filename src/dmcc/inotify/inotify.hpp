@@ -39,7 +39,7 @@ namespace dmcc {
         class watch;
 
         /**
-         * @brief Wraps all this low-level inotify stuff
+         * \brief Wraps all this low-level inotify stuff
          * and provides a nice object-oriented interface to it.
          */
         class inotify
@@ -53,16 +53,16 @@ namespace dmcc {
             typedef boost::signal<bool (inotify&, const event& event)> event_sig_t;
 
             /**
-             * @brief Constructs a new object and initializes the
+             * \brief Constructs a new object and initializes the
              * inotify-interface.
              */
             inotify();
 
             /**
-             * @brief Adds a new watch for a file.
-             * @param path The path to watch
-             * @param mask The event-mask to listen for
-             * @param depth The depth relative to the root-watch.
+             * \brief Adds a new watch for a file.
+             * \param path The path to watch
+             * \param mask The event-mask to listen for
+             * \param depth The depth relative to the root-watch.
              */
             void add_watch(const boost::filesystem::path& path, uint32_t mask //,
                            /*int depth*/);
@@ -70,16 +70,16 @@ namespace dmcc {
             void add_watch(boost::shared_ptr<watch> w, uint32_t mask);
 
             /**
-             * @brief Connect a slot to the event-signal.
+             * \brief Connect a slot to the event-signal.
              *
              * Everytime an event is read, a signal is fired.
              * See Boost.Signal for further information.
-             * @param slot The slot to connect.
+             * \param slot The slot to connect.
              */
             void connect_slot(const event_sig_t::slot_type& slot);
 
             /**
-             * @brief Start the listening process.
+             * \brief Start the listening process.
              *
              * This functions blocks until the signal-slot returns false.
              */
@@ -95,7 +95,7 @@ namespace dmcc {
 
 
         /**
-         * @brief A wrapper for an inotify-event structure.
+         * \brief A wrapper for an inotify-event structure.
          */
         class event
         {
@@ -104,13 +104,13 @@ namespace dmcc {
 
         public:
             /**
-             * @brief Returns the watch descriptor.
-             * @return The watch-descriptor.
+             * \brief Returns the watch descriptor.
+             * \return The watch-descriptor.
              */
             int wd() const;
 
             /**
-               @brief Returns the mask that the event carries with.
+               \brief Returns the mask that the event carries with.
             */
             uint32_t mask() const;
             uint32_t cookie() const;
@@ -127,7 +127,7 @@ namespace dmcc {
 
 
         /**
-           @brief Used to transfer additional information with
+           \brief Used to transfer additional information with
            an event object.
         */
         class watch

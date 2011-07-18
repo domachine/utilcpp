@@ -26,7 +26,7 @@ namespace dmcc {
     namespace exception {
 
         /**
-         * @brief Is thrown if an error occurs that
+         * \brief Is thrown if an error occurs that
          * could be interesting for the user.
          *
          * It is catched at the toplevel and printed.
@@ -36,7 +36,7 @@ namespace dmcc {
             DMCC_INIT_RAISABLE(user_error)
         public:
             /**
-             * @brief An enumeration specifying the error-levels that
+             * \brief An enumeration specifying the error-levels that
              * a user error can have.
              *
              * An error usally causes the exit of the application.
@@ -48,18 +48,18 @@ namespace dmcc {
             };
 
             /**
-             * @brief Constructs a new Error that can be thrown.
-             * @param what The error message this object will be associated
+             * \brief Constructs a new Error that can be thrown.
+             * \param what The error message this object will be associated
              * with.
-             * @param level The error level.
-             * @param file Is passed to DebugInfo.
-             * @param line Is passed to DebugInfo.
+             * \param level The error level.
+             * \param file Is passed to DebugInfo.
+             * \param line Is passed to DebugInfo.
              */
             user_error(const std::string& what, Level level);
 
             /**
-             * @brief Returns the level associated with this object.
-             * @return The level.
+             * \brief Returns the level associated with this object.
+             * \return The level.
              */
             Level level() const;
 

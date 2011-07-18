@@ -28,7 +28,7 @@ namespace dmcc {
     namespace exception {
         
         /**
-           @brief Makes the boost system_error compatible with the
+           \brief Makes the boost system_error compatible with the
            raise protocol.
         */
         class DMCC_RAISABLE(system_error),
