@@ -119,6 +119,8 @@ namespace dmcc {
 
             boost::filesystem::path path() const;
 
+            boost::shared_ptr<watch> parent() const;
+
         private:
             inotify_event* m_event;
             //boost::filesystem::path m_path;
