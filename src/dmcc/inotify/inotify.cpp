@@ -34,6 +34,7 @@ using fs::directory_iterator;
 using boost::regex;
 
 using boost::system::system_category;
+using boost::shared_ptr;
 
 
 namespace dmcc {
@@ -55,7 +56,20 @@ namespace dmcc {
             if(wd <= 0)
                 DMCC_RAISE_LINUX_SYS_ERR("unable to add watch for `" + path.string() + "'");
 
-            m_wd_map.insert(std::pair<int,fs::path>(wd, path));
+            shared_ptr<watch> w = shared_ptr<watch>(new watch(path));
+            m_wd_map.insert(std::pair<int,shared_ptr<watch> >(wd, w));
+        }
+
+        void inotify::add_watch(boost::shared_ptr<watch> w, uint32_t mask)
+        {
+            // Add watch to underlaying inotify-descriptor.
+            int wd = inotify_add_watch(m_descr, w->path().string().c_str(), mask);
+
+            // Inform user about failure.
+            if(wd <= 0)
+                DMCC_RAISE_LINUX_SYS_ERR("unable to add watch for `" + w->path().string() + "'");
+
+            m_wd_map.insert(std::pair<int,shared_ptr<watch> >(wd, w));
         }
 
         void inotify::connect_slot(const event_sig_t::slot_type& slot)
@@ -96,9 +110,8 @@ namespace dmcc {
                     // Construct event from next chunk.
                     ev.m_event = (inotify_event*)(&buf[i]);
 
-                    const fs::path& p = m_wd_map[ev.wd()];
-            
-                    ev.m_path = p / ev.name();
+                    ev.m_watch = m_wd_map[ev.wd()];
+                    DMCC_ASSERT(ev.m_watch);
 
                     // Emit signal.
                     if((break_out = m_signal(*this, ev)) == true)
@@ -143,9 +156,20 @@ namespace dmcc {
             return m_event->name;
         }
 
-        const fs::path& event::path() const
+        fs::path event::path() const
         {
             DMCC_ASSERT(m_event);
+            return m_watch->path() / name();
+        }
+
+
+        watch::watch(const boost::filesystem::path& path)
+            : m_path(path)
+        {
+        }
+
+        const boost::filesystem::path& watch::path()
+        {
             return m_path;
         }
     }

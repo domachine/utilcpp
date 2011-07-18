@@ -36,6 +36,7 @@ struct inotify_event;
 namespace dmcc {
     namespace inotify {
         class event;
+        class watch;
 
         /**
          * @brief Wraps all this low-level inotify stuff
@@ -66,6 +67,8 @@ namespace dmcc {
             void add_watch(const boost::filesystem::path& path, uint32_t mask //,
                            /*int depth*/);
 
+            void add_watch(boost::shared_ptr<watch> w, uint32_t mask);
+
             /**
              * @brief Connect a slot to the event-signal.
              *
@@ -87,7 +90,7 @@ namespace dmcc {
             event_sig_t m_signal;
             int m_descr;
 
-            std::map<int,boost::filesystem::path> m_wd_map;
+            std::map<int,boost::shared_ptr<watch> > m_wd_map;
         };
 
 
@@ -114,10 +117,27 @@ namespace dmcc {
 
             std::string name() const;
 
-            const boost::filesystem::path& path() const;
+            boost::filesystem::path path() const;
 
         private:
             inotify_event* m_event;
+            //boost::filesystem::path m_path;
+            boost::shared_ptr<watch> m_watch;
+        };
+
+
+        /**
+           @brief Used to transfer additional information with
+           an event object.
+        */
+        class watch
+        {
+        public:
+            watch(const boost::filesystem::path& path);
+
+            const boost::filesystem::path& path();
+
+        private:
             boost::filesystem::path m_path;
         };
     }
