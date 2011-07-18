@@ -162,6 +162,11 @@ namespace dmcc {
             return m_watch->path() / name();
         }
 
+        boost::shared_ptr<watch> event::parent() const
+        {
+            return m_watch;
+        }
+
 
         watch::watch(const boost::filesystem::path& path)
             : m_path(path)
